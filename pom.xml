@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.saul</groupId>
-	<artifactId>blockchain-learing</artifactId>
+	<artifactId>blockchain-learning</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>blockchain-learing</name>
+	<name>blockchain-learning</name>
 	<description>Blockchain for learning</description>
 	<properties>
 		<java.version>11</java.version>
@@ -27,6 +27,32 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.20</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.iq80.leveldb</groupId>
+			<artifactId>leveldb-api</artifactId>
+			<version>0.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.iq80.leveldb</groupId>
+			<artifactId>leveldb</artifactId>
+			<version>0.12</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.78</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

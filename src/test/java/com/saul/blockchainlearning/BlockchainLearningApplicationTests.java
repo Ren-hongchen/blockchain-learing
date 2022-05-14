@@ -1,10 +1,10 @@
-package com.saul.blockchainlearing;
+package com.saul.blockchainlearning;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BlockchainLearingApplicationTests {
+class BlockchainLearningApplicationTests {
 
 	@Test
 	void contextLoads() {
