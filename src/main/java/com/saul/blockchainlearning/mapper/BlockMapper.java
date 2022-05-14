@@ -19,9 +19,6 @@ import java.util.Map;
 
 @Component
 public class BlockMapper {
-    @Autowired
-    private Serializer serializer;
-
 
     private DB db = null;
     @Value("${leveldb_block.db_folder")
@@ -43,7 +40,7 @@ public class BlockMapper {
 
     public void put(String key, Object obj) {
         try {
-            this.db.put(key.getBytes(charset), serializer.serialize(obj));
+            this.db.put(key.getBytes(charset), Serializer.serialize(obj));
         } catch (UnsupportedEncodingException e) {
             System.out.println("failed when put");
             e.printStackTrace();
@@ -62,7 +59,7 @@ public class BlockMapper {
         if(val == null) {
             return null;
         }
-        return serializer.deserialize(val);
+        return Serializer.deserialize(val);
     }
 
 
