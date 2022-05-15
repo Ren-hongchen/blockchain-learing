@@ -1,8 +1,12 @@
 package com.saul.blockchainlearning;
 
+import com.saul.blockchainlearning.algorithm.Hash160;
+import com.saul.blockchainlearning.algorithm.Hash256;
 import com.saul.blockchainlearning.service.AccountService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.nio.charset.StandardCharsets;
 
 @SpringBootTest
 class BlockchainLearningApplicationTests {
@@ -11,6 +15,18 @@ class BlockchainLearningApplicationTests {
 	void contextLoads() {
 	}
 
+
+	@Test
+	void hash256() throws Exception{
+		String s = Hash256.hash256("bitcoin is awesome".getBytes(StandardCharsets.UTF_8));
+		System.out.println(s);
+	}
+
+	@Test
+	void hash160() throws Exception {
+		String s = Hash160.hash160("bitcoin is awesome".getBytes(StandardCharsets.UTF_8));
+		System.out.println(s);
+	}
 
 	@Test
 	void getPrivateKey() throws Exception{

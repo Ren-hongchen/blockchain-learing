@@ -2,7 +2,6 @@ package com.saul.blockchainlearning.service;
 
 import com.saul.blockchainlearning.algorithm.Base58;
 import com.saul.blockchainlearning.algorithm.Hash256;
-import com.saul.blockchainlearning.utils.HexUtil;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +22,15 @@ public class AccountService {
     }
 
     private String getWIFwithCompress(String private_key) throws Exception {
-        String data = "80" + private_key + "01";
-        String checksum = Hash256.hash256(private_key.getBytes()).substring(0,8);
-        return Base58.encode(HexUtil.hexStringToByteArray(data + checksum));
+        String s = "80" + private_key + "01";
+        String checksum = Hash256.hash256(Hex.decode(s)).substring(0,8);
+        return Base58.encode(Hex.decode(s+ checksum));
     }
 
-    private String getWIFwithNoCompress() {
-        return new String();
+    private String getWIFwithNoCompress(String private_key) throws Exception {
+        String s = "80" + private_key;
+        String checksum = Hash256.hash256(Hex.decode(s)).substring(0,8);
+        return Base58.encode(Hex.decode(s + checksum));
     }
 
 }
