@@ -22,7 +22,7 @@ public class TransactionService {
             Object obj = transactionMapper.get(key);
             if(obj instanceof ArrayList<?>) {
                 for(Object o : (List<?>)obj) {
-                    transactionList.add(Transaction.class.cast(o));
+                    transactionList.add((Transaction) o);
                 }
             }
         }
