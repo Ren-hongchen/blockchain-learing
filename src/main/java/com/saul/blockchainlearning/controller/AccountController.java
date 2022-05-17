@@ -25,12 +25,11 @@ public class AccountController {
     @GetMapping("/create")
     public AccountDTO createAccount() throws Exception {
         AccountDTO accountDTO = new AccountDTO();
-        String private_key = accountService.getPrivateKey();
-        String public_key = accountService.getPublicKey(private_key);
-        accountDTO.setPrivate_key(private_key);
-        accountDTO.setWif(accountService.getWIF(private_key));
-        accountDTO.setPublic_key(public_key);
-        accountDTO.setAddress(accountService.getAddress(public_key));
+        accountService.setKeyPair();
+        accountDTO.setPrivate_key(accountService.getPrivate_key());
+        accountDTO.setWif(accountService.getWIF());
+        accountDTO.setPublic_key(accountService.getPublic_key());
+        accountDTO.setAddress(accountService.getAddress());
         accountDTO.setUTXO(0.00d);
         return accountDTO;
     }

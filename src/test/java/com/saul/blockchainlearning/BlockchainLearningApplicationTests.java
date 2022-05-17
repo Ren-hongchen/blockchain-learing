@@ -34,24 +34,25 @@ class BlockchainLearningApplicationTests {
 	@Test
 	void getPrivateKey() throws Exception{
 		AccountService accountService = new AccountService();
-		System.out.println(accountService.getPrivateKey());
+		accountService.setKeyPair();
+		System.out.println(accountService.getPrivate_key());
 	}
 
 	@Test
 	void getWIF() throws Exception {
 		AccountService accountService = new AccountService();
-		System.out.println(accountService.getWIF("0c28fca386c7a227600b2fe50b7cae11ec86d3bf1fbe471be89827e19d72aa1d"));
+		//System.out.println(accountService.getWIF("0c28fca386c7a227600b2fe50b7cae11ec86d3bf1fbe471be89827e19d72aa1d"));
 	}
 
 	@Test
 	void getPublicKey() {
-		System.out.println(ECDSA.getPublicKey("0c28fca386c7a227600b2fe50b7cae11ec86d3bf1fbe471be89827e19d72aa1d"));
+		//System.out.println(ECDSA.getPublicKey("56abac97d01f910f45e939c94e0f90f799b0d6474882502d0a7a0197e42a2291"));
 	}
 
 	@Test
 	void getAddress() throws Exception {
 		AccountService accountService = new AccountService();
-		System.out.println(accountService.getAddress("02d0de0aaeaefad02b8bdc8a01a1b8b11c696bd3d66a2c5f10780d95b7df42645c"));
+		//System.out.println(accountService.getAddress("02d0de0aaeaefad02b8bdc8a01a1b8b11c696bd3d66a2c5f10780d95b7df42645c"));
 	}
 
 	@Test
