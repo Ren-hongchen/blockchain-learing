@@ -1,5 +1,6 @@
 package com.saul.blockchainlearning;
 
+import com.saul.blockchainlearning.pool.TxPool;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

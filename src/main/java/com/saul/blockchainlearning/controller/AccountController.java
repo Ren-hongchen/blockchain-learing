@@ -17,12 +17,12 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/get")
+    @PostMapping("/account/get")
     public double getAccountMessage(@RequestParam("public_key") String key) {
         return transactionService.getUTXO(key);
     }
 
-    @GetMapping("/create")
+    @GetMapping("/account/create")
     public AccountDTO createAccount() throws Exception {
         AccountDTO accountDTO = new AccountDTO();
         accountService.setKeyPair();
