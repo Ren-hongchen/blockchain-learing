@@ -1,6 +1,6 @@
-blockchain/HELP.md
+HELP.md
 target/
-!blockchain/.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 
@@ -31,4 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/blockchain/src/main/java/com/saul/blockchainlearning/test/
