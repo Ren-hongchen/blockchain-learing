@@ -1,5 +1,7 @@
-package com.saul.blockchainlearning.dto;
+package com.lalo.wallet.wallet.dto;
 
+import com.lalo.wallet.wallet.dto.InputDTO;
+import com.lalo.wallet.wallet.dto.OutputDTO;
 import lombok.Data;
 
 import java.util.List;
