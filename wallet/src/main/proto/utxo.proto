@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package com.lalo.wallet.wallet.network;
+option java_outer_classname = "utxoProto";
+option java_multiple_files = true;
+
+service utxoRPC {
+  rpc getUTXObyKey(Key) returns (utxo_list) {}
+}
+
+message Key {
+  string key = 1;
+}
+
+message utxo_list {
+  repeated rpc_UTXO utxo = 1;
+}
+
+message rpc_UTXO {
+  string txid = 1;
+  int32 vout = 2;
+  string address = 3;
+  string scriptPubKey = 4;
+  double amount = 5;
+  int32 confirmations = 6;
+  bool spendable = 7;
+  bool solvable = 8;
+}

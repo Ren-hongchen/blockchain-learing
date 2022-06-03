@@ -1,18 +1,17 @@
 package com.lalo.wallet.wallet.service;
 
-import com.lalo.wallet.wallet.algorithm.ECDSA;
 import com.lalo.wallet.wallet.algorithm.Hash160;
 import com.lalo.wallet.wallet.algorithm.Hash256;
 import com.lalo.wallet.wallet.dto.*;
 import com.lalo.wallet.wallet.scripts.ScriptUtil;
 import com.lalo.wallet.wallet.serialization.Serializer;
 import org.bouncycastle.util.encoders.Hex;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 public class TransactionService {
     public TransactionDTO getDTO(UserTxDTO userTxDTO) throws Exception {
         TransactionDTO transactionDTO = new TransactionDTO();

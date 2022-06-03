@@ -4,6 +4,7 @@ import com.saul.blockchainlearning.algorithm.ECDSA;
 import com.saul.blockchainlearning.algorithm.Hash160;
 import com.saul.blockchainlearning.algorithm.Hash256;
 import com.saul.blockchainlearning.dto.InputDTO;
+import com.saul.blockchainlearning.serialization.Serializer;
 import org.bouncycastle.util.encoders.Hex;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -68,19 +69,12 @@ class BlockchainLearningApplicationTests {
 	@Test
 	void test_pool() {
 		List<InputDTO> a = new ArrayList<>();
-		List<InputDTO> c = new ArrayList<>();
 		InputDTO inputDTO = new InputDTO();
 		inputDTO.setScript("1123");
 		a.add(inputDTO);
-		List<InputDTO> b = a;
-		b.get(0).setScript("2233");
-		for(InputDTO inputDTO2 : a) {
-			InputDTO inputDTO1 = new InputDTO();
-			inputDTO1.setScript("123");
-			c.add(inputDTO1);
+		byte[] b = Serializer.serialize(a);
+		for (byte value : b) {
+			System.out.println(value);
 		}
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
 	}
 }
