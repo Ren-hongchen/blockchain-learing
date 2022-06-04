@@ -1,23 +1,18 @@
 package com.lalo.wallet.wallet.serialization;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.google.common.reflect.Reflection;
 import com.google.gson.Gson;
-import org.springframework.util.ReflectionUtils;
-
-import java.nio.charset.StandardCharsets;
+import com.google.gson.GsonBuilder;
 
 
 public class Serializer {
 
-    private static Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().serializeNulls().create();
 
     public static byte[] serialize(Object obj) {
         return gson.toJson(obj).getBytes();
     }
 
-    public static <T> Object deserialize(byte[] bytes, Class<T> clazz) {
+    public static <T> T deserialize(byte[] bytes, Class<T> clazz) {
         return gson.fromJson(new String(bytes), clazz);
     }
 }

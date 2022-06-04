@@ -8,6 +8,8 @@ import java.util.List;
 
 @Data
 public class TransactionDTO {
+    private String txid;
+    private int size;
     private int version; // 4 bytes
     //private String flag; //Optional flag, if present, must be 0001, which indicates there is witness data in this transaction
     private int inputCounter;

@@ -1,5 +1,6 @@
 package com.lalo.wallet.wallet.controller;
 
+import com.google.protobuf.util.JsonFormat;
 import com.lalo.wallet.wallet.dto.AccountDTO;
 import com.lalo.wallet.wallet.dto.TransactionDTO;
 import com.lalo.wallet.wallet.dto.UserTxDTO;
@@ -8,6 +9,7 @@ import com.lalo.wallet.wallet.network.rpc_UTXO;
 import com.lalo.wallet.wallet.dto.UTXO;
 import com.lalo.wallet.wallet.network.UTXO_RPC;
 import com.lalo.wallet.wallet.network.utxo_list;
+import com.lalo.wallet.wallet.serialization.Serializer;
 import com.lalo.wallet.wallet.service.AccountService;
 import com.lalo.wallet.wallet.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +48,15 @@ public class AccountController {
     public void AccountRescan(@RequestParam("public_key") String key) throws Exception {
         //rescan utxo from a specific node
         GlobalVariable.utxoList = null;
+
         utxo_list result = UTXO_RPC.getUTXO(key);
         List<rpc_UTXO> utxoList = result.getUtxoList();
+
         for(rpc_UTXO rpc_utxo : utxoList) {
             if(rpc_utxo.getSpendable()) {
-                UTXO utxo = new UTXO();
-                utxo.setTxid(rpc_utxo.getTxid());
+                String jsonObject = JsonFormat.printer().print(rpc_utxo);
+                UTXO utxo = Serializer.deserialize(jsonObject.getBytes(), UTXO.class);
+                GlobalVariable.utxoList.add(utxo);
             }
         }
     }

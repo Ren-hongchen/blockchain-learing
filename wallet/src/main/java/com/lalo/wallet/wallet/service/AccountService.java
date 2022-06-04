@@ -6,8 +6,9 @@ import com.lalo.wallet.wallet.algorithm.Hash160;
 import com.lalo.wallet.wallet.algorithm.Hash256;
 import com.lalo.wallet.wallet.dto.OutputDTO;
 import com.lalo.wallet.wallet.dto.TransactionDTO;
+import com.lalo.wallet.wallet.dto.UTXO;
 import com.lalo.wallet.wallet.globalvariable.GlobalVariable;
-import com.lalo.wallet.wallet.network.UTXO;
+import com.lalo.wallet.wallet.network.rpc_UTXO;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Service;
 
@@ -66,10 +67,18 @@ public class AccountService {
     }
 
     public void ScanTx(TransactionDTO transactionDTO) {
+        int i = 0;
         for(OutputDTO outputDTO : transactionDTO.getOutput()) {
-            if(outputDTO.getScript().equals(GlobalVariable.scriptPubKey)) {
-                UTXO utxo = UTXO.newBuilder().build();
-
+            if(outputDTO.getScript().getHex().equals(GlobalVariable.scriptPubKey)) {
+                UTXO utxo = new UTXO();
+                utxo.setTxid(transactionDTO.getTxid());
+                utxo.setVout(i);
+                utxo.setAddress(outputDTO.getScript().getAddress());
+                utxo.setAmount(outputDTO.getValue());
+                utxo.setConfirmations(1);
+                utxo.setSpendable(true);
+                utxo.setScriptPubKey(outputDTO.getScript().getHex());
+                GlobalVariable.utxoList.add(utxo);
             }
         }
     }

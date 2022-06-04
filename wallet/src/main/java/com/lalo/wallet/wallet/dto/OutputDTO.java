@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class OutputDTO {
     private double value;
-    private String script;
+    private ScriptPubKey script;
 }

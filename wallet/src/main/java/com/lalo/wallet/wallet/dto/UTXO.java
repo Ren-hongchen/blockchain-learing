@@ -6,7 +6,7 @@ import lombok.Data;
 public class UTXO {
     private String txid;
     private int vout;
-    private String address;
+    private String address; //recieve address
     private String scriptPubKey;
     private double amount;
     private int confirmations;
