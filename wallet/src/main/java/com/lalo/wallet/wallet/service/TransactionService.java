@@ -3,6 +3,7 @@ package com.lalo.wallet.wallet.service;
 import com.lalo.wallet.wallet.algorithm.Hash160;
 import com.lalo.wallet.wallet.algorithm.Hash256;
 import com.lalo.wallet.wallet.dto.*;
+import com.lalo.wallet.wallet.globalvariable.GlobalVariable;
 import com.lalo.wallet.wallet.scripts.ScriptUtil;
 import com.lalo.wallet.wallet.serialization.Serializer;
 import org.bouncycastle.util.encoders.Hex;
@@ -17,41 +18,77 @@ public class TransactionService {
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setVersion(0);
         transactionDTO.setLocktime(0);
-        transactionDTO.setInputCounter(userTxDTO.getInputs().size());
         transactionDTO.setOutputCounter(userTxDTO.getOutputs().size());
+
+        double outputValue = 0.00d;
+        List<UTXO> utxoList = new ArrayList<>();
+        utxoList.add(getUTXO());
+        double inputValue = utxoList.get(0).getAmount();
+        while(inputValue - 0.001 <= outputValue) {
+            UTXO utxo1 = getUTXO();
+            inputValue += utxo1.getAmount();
+            utxoList.add(utxo1);
+        }
 
         List<UserOutputDTO> outputs = userTxDTO.getOutputs();
         List<OutputDTO> outputDTOs = new ArrayList<>();
+
+        if(inputValue - 0.001 > outputValue) {
+            UserOutputDTO unspentAmount = new UserOutputDTO();
+            unspentAmount.setAddress(GlobalVariable.account.getPublic_key());
+            unspentAmount.setAmount(inputValue - 0.001 - outputValue);
+            outputs.add(unspentAmount);
+        }
+
         for(UserOutputDTO output : outputs) {
             OutputDTO outputDTO = new OutputDTO();
             outputDTO.setValue(output.getAmount());
-            String scriptPubKey = "76a914" + Hash160.hash160(Hex.decode(output.getAddress())) + "88ac";
+            outputValue += output.getAmount();
+
+            String hash = Hash160.hash160(Hex.decode(output.getAddress()));
+            String scriptPubKey_hex = "76a914" + hash + "88ac";
+            ScriptPubKey scriptPubKey = new ScriptPubKey();
+            scriptPubKey.setHex(scriptPubKey_hex);
+            scriptPubKey.setAsm("OP_DUP OP_HASH160 " + hash + " OP_EQUALVERIFY OP_CHECKSIG");
+            scriptPubKey.setType("pubkeyhash");
+            scriptPubKey.setAddress(output.getAddress());
             outputDTO.setScript(scriptPubKey);
+
             outputDTOs.add(outputDTO);
         }
 
         transactionDTO.setOutput(outputDTOs);
 
-        List<InputDTO> inputs = userTxDTO.getInputs();
-        List<InputDTO> inputs_copy = new ArrayList<>();
-        for(InputDTO inputDTO : inputs) {
-            InputDTO input = new InputDTO();
-            input.setPrev_txid(inputDTO.getPrev_txid());
-            input.setPrev_vout(inputDTO.getPrev_vout());
-            input.setScript("");
-            inputs_copy.add(input);
+
+
+        List<InputDTO> inputList = new ArrayList<>();
+        List<InputDTO> inputList_copy = new ArrayList<>();
+        for(UTXO utxo : utxoList) {
+            InputDTO inputDTO = new InputDTO();
+            inputDTO.setPrev_txid(utxo.getTxid());
+            inputDTO.setPrev_vout(utxo.getVout());
+            inputList_copy.add(inputDTO);
+            inputDTO.setScript(utxo.getScriptPubKey());
+            inputList.add(inputDTO);
         }
 
-        for(int i = 0; i < userTxDTO.getInputs().size(); i++) {
-            inputs_copy.set(i,inputs.get(i));
-            transactionDTO.setInput(inputs_copy);
+        transactionDTO.setInputCounter(inputList.size());
+
+        for(int i = 0; i<inputList.size(); i++) {
+            inputList_copy.get(i).setScript(inputList.get(i).getScript());
+            transactionDTO.setInput(inputList_copy);
             String hash = Hash256.hash256(Serializer.serialize(transactionDTO));
-            String scriptSig = ScriptUtil.getScriptSig(userTxDTO.getPrivate_key(), userTxDTO.getPublic_key(), hash);
-            inputs.get(i).setScript(scriptSig);
-            inputs_copy.get(i).setScript("");
+            String scriptSig = ScriptUtil.getScriptSig(GlobalVariable.account.getPrivate_key(), GlobalVariable.account.getPublic_key(), hash);
+            inputList.get(i).setScript(scriptSig);
+            inputList_copy.get(i).setScript("");
         }
 
-        transactionDTO.setInput(inputs);
+        transactionDTO.setInput(inputList);
+
         return transactionDTO;
+    }
+
+    private UTXO getUTXO() {
+        return new UTXO();
     }
 }

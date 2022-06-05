@@ -29,7 +29,7 @@ public class AccountController {
     @Autowired
     private TransactionService txService;
 
-    @PostMapping("/account/utxo/get")
+    @PostMapping("/account/utxo/show_all")
     public List<UTXO> getAccountUTXO(@RequestParam("public_key") String key) throws Exception {
         return GlobalVariable.utxoList;
     }
@@ -70,11 +70,13 @@ public class AccountController {
         accountDTO.setPublic_key(accountService.getPublic_key());
         accountDTO.setAddress(accountService.getAddress());
         accountDTO.setUTXO(0.00d);
+        GlobalVariable.account = accountDTO;
+        GlobalVariable.resetScriptPubkey(accountDTO.getPublic_key());
         return accountDTO;
     }
 
     @PostMapping("/transaction/send")
-    public void createTransaction(UserTxDTO userTxDTO) throws Exception {
+    public void sendTransaction(UserTxDTO userTxDTO) throws Exception {
         TransactionDTO transactionDTO = txService.getDTO(userTxDTO);
         //broadcast
     }

@@ -1,6 +1,7 @@
 package com.lalo.wallet.wallet.globalvariable;
 
 import com.lalo.wallet.wallet.algorithm.Hash160;
+import com.lalo.wallet.wallet.dto.AccountDTO;
 import com.lalo.wallet.wallet.dto.UTXO;
 import lombok.Data;
 import org.bouncycastle.util.encoders.Hex;
@@ -12,6 +13,7 @@ public class GlobalVariable {
     public static String scriptPubKey;
     public static List<Address> AddressList;
     public static List<UTXO> utxoList;
+    public static AccountDTO account;
 
 
     public static void resetScriptPubkey(String public_key) throws Exception {
