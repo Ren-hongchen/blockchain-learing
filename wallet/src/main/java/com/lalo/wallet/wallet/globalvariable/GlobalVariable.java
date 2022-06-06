@@ -7,12 +7,14 @@ import lombok.Data;
 import org.bouncycastle.util.encoders.Hex;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class GlobalVariable {
     public static String scriptPubKey;
     public static List<Address> AddressList;
     public static List<UTXO> utxoList;
+    public static Map<String, UTXO> utxos_not_confirmed;
     public static AccountDTO account;
 
 

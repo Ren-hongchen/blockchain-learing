@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class TransactionService {
+
     public TransactionDTO getDTO(UserTxDTO userTxDTO) throws Exception {
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setVersion(0);
@@ -93,6 +94,8 @@ public class TransactionService {
     }
 
     private UTXO getUTXO() {
-        return new UTXO();
+        UTXO utxo =  GlobalVariable.utxoList.remove(GlobalVariable.utxoList.size() - 1);
+        GlobalVariable.utxos_not_confirmed.put(utxo.getTxid(), utxo);
+        return utxo;
     }
 }
