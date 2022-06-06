@@ -85,6 +85,10 @@ public class TransactionService {
 
         transactionDTO.setInput(inputList);
 
+
+        transactionDTO.setSize(Serializer.serialize(transactionDTO).length);
+        transactionDTO.setTxid(Hash256.hash256(Serializer.serialize(transactionDTO)));
+
         return transactionDTO;
     }
 

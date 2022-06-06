@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package com.lalo.wallet.wallet.network;
+option java_outer_classname = "txProto";
+option java_multiple_files = true;
+
+service txRPC {
+  rpc sendTransaction(Transaction) returns (txid) {}
+}
+
+message txid {
+  string txid = 1;
+}
+
+message Transaction {
+  string txid = 1;
+  int32 size = 2;
+  int32 version = 3; // 4 bytes
+  int32 inputCounter = 4;
+  repeated Input input = 5;
+  int32 outputCounter = 6;
+  repeated Output output = 7;
+  int32 locktime = 8;
+}
+
+message Input {
+  string prev_txid = 1;
+  int32 prev_vout = 2;
+  string scriptSig = 3;
+}
+
+message Output {
+  double value = 1;
+  string scriptPubKey = 2;
+}

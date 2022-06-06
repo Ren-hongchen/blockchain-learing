@@ -5,10 +5,8 @@ import com.lalo.wallet.wallet.dto.AccountDTO;
 import com.lalo.wallet.wallet.dto.TransactionDTO;
 import com.lalo.wallet.wallet.dto.UserTxDTO;
 import com.lalo.wallet.wallet.globalvariable.GlobalVariable;
-import com.lalo.wallet.wallet.network.rpc_UTXO;
+import com.lalo.wallet.wallet.network.*;
 import com.lalo.wallet.wallet.dto.UTXO;
-import com.lalo.wallet.wallet.network.UTXO_RPC;
-import com.lalo.wallet.wallet.network.utxo_list;
 import com.lalo.wallet.wallet.serialization.Serializer;
 import com.lalo.wallet.wallet.service.AccountService;
 import com.lalo.wallet.wallet.service.TransactionService;
@@ -76,8 +74,8 @@ public class AccountController {
     }
 
     @PostMapping("/transaction/send")
-    public void sendTransaction(UserTxDTO userTxDTO) throws Exception {
+    public txid sendTransaction(UserTxDTO userTxDTO) throws Exception {
         TransactionDTO transactionDTO = txService.getDTO(userTxDTO);
-        //broadcast
+        return TX_RPC.sendTransaction(transactionDTO);
     }
 }
