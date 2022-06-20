@@ -21,8 +21,9 @@ public class AccountService {
     private String private_key = null;
     private String public_key = null;
 
-    public void setKeyPair() throws Exception {
+    public void setKeyPair(){
         KeyPair keyPair = ECDSA.getKeyPair();
+        assert keyPair != null;
         ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
         ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
         private_key = ecPrivateKey.getS().toString(16);

@@ -14,11 +14,16 @@ import java.security.spec.*;
 
 public class ECDSA {
 
-    public static KeyPair getKeyPair() throws Exception {
-        Security.addProvider(new BouncyCastleProvider());
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
-        keyPairGenerator.initialize(new ECGenParameterSpec("secp256k1"));
-        return keyPairGenerator.generateKeyPair();
+    public static KeyPair getKeyPair() {
+        try {
+            Security.addProvider(new BouncyCastleProvider());
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
+            keyPairGenerator.initialize(new ECGenParameterSpec("secp256k1"));
+            return keyPairGenerator.generateKeyPair();
+        } catch (Exception e) {
+            System.out.println(e.getCause().getMessage());
+        }
+        return null;
     }
 
     public static PrivateKey getPrivateKeyFromECBigIntAndCurve(BigInteger s, String curveName) {
