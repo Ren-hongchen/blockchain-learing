@@ -8,13 +8,10 @@ import com.lalo.wallet.wallet.dto.OutputDTO;
 import com.lalo.wallet.wallet.dto.TransactionDTO;
 import com.lalo.wallet.wallet.dto.UTXO;
 import com.lalo.wallet.wallet.globalvariable.GlobalVariable;
-import com.lalo.wallet.wallet.network.rpc_UTXO;
 import org.bouncycastle.util.encoders.Hex;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
-import java.security.interfaces.ECPrivateKey;
-import java.security.interfaces.ECPublicKey;
 
 @Service
 public class AccountService {
@@ -24,15 +21,8 @@ public class AccountService {
     public void setKeyPair(){
         KeyPair keyPair = ECDSA.getKeyPair();
         assert keyPair != null;
-        ECPublicKey ecPublicKey = (ECPublicKey) keyPair.getPublic();
-        ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
-        private_key = ecPrivateKey.getS().toString(16);
-        String key = ecPublicKey.getW().getAffineY().toString(16);
-        if(key.endsWith("2")) {
-            public_key = "02" + ecPublicKey.getW().getAffineX().toString(16);
-        } else {
-            public_key = "03" + ecPublicKey.getW().getAffineX().toString(16);
-        }
+        private_key = ECDSA.getPrivateKeyStrFromPrivateKey(keyPair);
+        public_key = ECDSA.getPublicKeyStrFromPublicKey(keyPair);
     }
 
     public String getPublic_key() {

@@ -1,11 +1,20 @@
 package com.lalo.wallet.wallet.socket;
 
+import com.lalo.wallet.wallet.algorithm.ECDSA;
+import com.lalo.wallet.wallet.algorithm.Hash256;
+import com.lalo.wallet.wallet.dto.CertificationDTO;
+import com.lalo.wallet.wallet.entity.ServerInfo;
+import com.lalo.wallet.wallet.serialization.Serializer;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.encoders.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -13,7 +22,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
 @Component
 @Slf4j
 @ServerEndpoint("/websocket/{userId}")
-public class WebSocket {
+public class WebSocket{
+
+    @Autowired
+    String PrivateKey;
+
+    @Autowired
+    String PublicKey;
+
+    private final KeyPair keyPair = ECDSA.getKeyPair(); //server key pair
 
     private Session session;
 
@@ -28,7 +45,26 @@ public class WebSocket {
             webSockets.add(this);
             sessionPool.put(userId, session);
             log.info("【websocket消息】有新的连接，总数为:"+webSockets.size());
+
+            ServerInfo serverInfo = new ServerInfo();
+            serverInfo.setName("bitcoin-wallet");
+            assert keyPair != null;
+            serverInfo.setPublic_key(ECDSA.getPublicKeyStrFromPublicKey(keyPair));
+            log.info(serverInfo.toString());
+            CertificationDTO certificationDTO = new CertificationDTO();
+            certificationDTO.setServerInfo(serverInfo);
+            byte[] hash_byte = Hash256.SHA256(Serializer.serialize(serverInfo));
+            String hash = Hex.toHexString(hash_byte);
+            log.info(hash);
+            log.info(PrivateKey);
+            log.info(PublicKey);
+            String signature = ECDSA.sign(hash, PrivateKey);
+            log.info(signature);
+            certificationDTO.setSignature(signature);
+            log.info(certificationDTO.toString());
+            session.getAsyncRemote().sendObject(certificationDTO);
         } catch (Exception e) {
+            log.info(e.getMessage());
         }
     }
 
@@ -41,6 +77,7 @@ public class WebSocket {
             webSockets.remove(this);
             log.info("【websocket消息】连接断开，总数为:"+webSockets.size());
         } catch (Exception e) {
+            log.info(e.getMessage());
         }
     }
 
@@ -55,7 +92,6 @@ public class WebSocket {
      */
     @OnError
     public void onError(Session session, Throwable error) {
-
         log.error(error.getMessage());
         error.printStackTrace();
     }

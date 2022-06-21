@@ -10,7 +10,11 @@ import org.bouncycastle.util.encoders.Hex;
 
 import java.math.BigInteger;
 import java.security.*;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ECDSA {
 
@@ -24,6 +28,22 @@ public class ECDSA {
             System.out.println(e.getCause().getMessage());
         }
         return null;
+    }
+
+    public static String getPrivateKeyStrFromPrivateKey(KeyPair keyPair) {
+        ECPrivateKey ecPrivateKey = (ECPrivateKey) keyPair.getPrivate();
+        return ecPrivateKey.getS().toString(16);
+    }
+
+    public static String getPublicKeyStrFromPublicKey(KeyPair keyPair) {
+        ECPublicKey ecPublicKey = (ECPublicKey)keyPair.getPublic();
+        String public_key = ecPublicKey.getW().getAffineY().toString(16);
+        if(public_key.endsWith("2")) {
+            public_key = "02" + ecPublicKey.getW().getAffineX().toString(16);
+        } else {
+            public_key = "03" + ecPublicKey.getW().getAffineX().toString(16);
+        }
+        return public_key;
     }
 
     public static PrivateKey getPrivateKeyFromECBigIntAndCurve(BigInteger s, String curveName) {
